@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owned by Rajiv</title>
+<meta name="description" content="This website is owned by Rajiv. Interested in purchasing it? Email rajiv@generationx.in">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07070b;
+    --fg:#f4f4f7;
+    --muted:#9a9aab;
+    --line:rgba(255,255,255,.08);
+    --a:#ff6a3d;
+    --b:#8b5cff;
+    --c:#22d3ee;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{min-height:100%}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:Inter,system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    min-height:100svh;
+    display:grid;
+    place-items:center;
+    overflow-x:hidden;
+    padding:96px 16px;
+  }
+  ::selection{background:var(--b);color:#fff}
+
+  /* ---------- Background: aurora blobs ---------- */
+  .aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .blob{
+    position:absolute;border-radius:50%;
+    filter:blur(90px);opacity:.45;mix-blend-mode:screen;
+    animation:drift 20s ease-in-out infinite alternate;
+  }
+  .blob.b1{width:45vmax;height:45vmax;background:var(--a);top:-15vmax;left:-10vmax}
+  .blob.b2{width:40vmax;height:40vmax;background:var(--b);bottom:-15vmax;right:-10vmax;animation-duration:24s;animation-delay:-6s}
+  .blob.b3{width:30vmax;height:30vmax;background:var(--c);top:40%;left:45%;opacity:.25;animation-duration:28s;animation-delay:-12s}
+  @keyframes drift{
+    0%  {transform:translate(0,0) scale(1) rotate(0deg)}
+    33% {transform:translate(8vw,6vh) scale(1.15) rotate(40deg)}
+    66% {transform:translate(-6vw,10vh) scale(.9) rotate(-30deg)}
+    100%{transform:translate(4vw,-8vh) scale(1.05) rotate(20deg)}
+  }
+
+  /* ---------- Background: moving grid ---------- */
+  .grid{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse at center,#000 10%,transparent 70%);
+            mask-image:radial-gradient(ellipse at center,#000 10%,transparent 70%);
+    animation:pan 12s linear infinite;
+  }
+  @keyframes pan{to{background-position:64px 64px}}
+
+  /* ---------- Background: film grain ---------- */
+  .noise{
+    position:fixed;inset:-50%;z-index:1;pointer-events:none;opacity:.07;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation:grain 1s steps(6) infinite;
+  }
+  @keyframes grain{
+    0%{transform:translate(0,0)} 20%{transform:translate(-5%,3%)}
+    40%{transform:translate(4%,-6%)} 60%{transform:translate(-3%,7%)}
+    80%{transform:translate(6%,2%)} 100%{transform:translate(0,0)}
+  }
+
+  /* ---------- Background: rising particles ---------- */
+  .particle{
+    position:fixed;bottom:-12px;left:var(--x);z-index:1;pointer-events:none;
+    width:var(--s);height:var(--s);border-radius:50%;
+    background:#fff;box-shadow:0 0 8px #fff;opacity:0;
+    animation:rise var(--d) linear var(--delay) infinite;
+  }
+  @keyframes rise{
+    0%  {transform:translate(0,0);opacity:0}
+    10% {opacity:.7}
+    50% {transform:translate(24px,-55vh)}
+    90% {opacity:.25}
+    100%{transform:translate(-12px,-112vh);opacity:0}
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:5;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px clamp(16px,4vw,40px);
+    font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
+    opacity:0;animation:dropIn .9s cubic-bezier(.2,.8,.2,1) .2s forwards;
+  }
+  .logo{
+    display:grid;place-items:center;width:36px;height:36px;border-radius:10px;
+    border:1px solid var(--line);color:var(--fg);font-family:Inter,sans-serif;font-weight:800;font-size:15px;letter-spacing:0;
+    background:rgba(255,255,255,.03);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .3s;
+  }
+  .logo:hover{transform:rotate(360deg) scale(1.1);border-color:var(--b)}
+  @keyframes dropIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:none}}
+
+  /* ---------- Stage & orbits ---------- */
+  .stage{position:relative;z-index:3;display:grid;place-items:center;width:100%}
+  .orbit{
+    position:absolute;top:50%;left:50%;border-radius:50%;
+    border:1px dashed rgba(255,255,255,.08);
+    transform:translate(-50%,-50%);
+    animation:orbit 40s linear infinite;pointer-events:none;
+    opacity:0;
+  }
+  .orbit::after{
+    content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;
+    background:var(--c);box-shadow:0 0 14px 3px var(--c);
+  }
+  .orbit.o1{width:min(115vmin,660px);height:min(115vmin,660px);animation:orbit 36s linear infinite,fadeIn 1.5s ease 1s forwards}
+  .orbit.o2{width:min(150vmin,880px);height:min(150vmin,880px);animation:orbitRev 60s linear infinite,fadeIn 1.5s ease 1.3s forwards}
+  .orbit.o2::after{background:var(--a);box-shadow:0 0 14px 3px var(--a)}
+  @keyframes orbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  @keyframes orbitRev{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+  @keyframes fadeIn{to{opacity:1}}
+
+  /* ---------- Card ---------- */
+  .float{animation:float 7s ease-in-out 2s infinite;width:min(640px,100%)}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+  @property --angle{syntax:'<angle>';initial-value:0deg;inherits:false}
+
+  .card{
+    position:relative;text-align:center;
+    padding:clamp(32px,6vw,60px) clamp(22px,5vw,56px);
+    border-radius:28px;
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08);
+    opacity:0;
+    animation:cardIn 1.2s cubic-bezier(.2,.8,.2,1) .3s forwards;
+  }
+  /* rotating gradient border */
+  .card::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+    background:conic-gradient(from var(--angle),transparent 0 55%,var(--a),var(--b),var(--c),transparent 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    animation:spin 5s linear infinite;pointer-events:none;
+  }
+  /* soft glow behind border */
+  .card::after{
+    content:"";position:absolute;inset:-1px;border-radius:inherit;z-index:-1;
+    background:conic-gradient(from var(--angle),transparent 0 60%,var(--b),var(--c),transparent);
+    filter:blur(28px);opacity:.35;animation:spin 5s linear infinite;
+  }
+  @keyframes spin{to{--angle:360deg}}
+  @keyframes cardIn{
+    from{opacity:0;transform:scale(.92) translateY(30px);filter:blur(12px)}
+    to  {opacity:1;transform:none;filter:blur(0)}
+  }
+
+  /* ---------- Badge ---------- */
+  .badge{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 16px 8px 12px;border-radius:999px;
+    border:1px solid var(--line);background:rgba(255,255,255,.04);
+    font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    opacity:0;animation:fadeUp .8s cubic-bezier(.2,.8,.2,1) .6s forwards;
+  }
+  .dot{position:relative;width:8px;height:8px;border-radius:50%;background:#34d399}
+  .dot::after{
+    content:"";position:absolute;inset:0;border-radius:50%;background:#34d399;
+    animation:ping 1.6s cubic-bezier(0,0,.2,1) infinite;
+  }
+  @keyframes ping{75%,100%{transform:scale(3);opacity:0}}
+
+  /* ---------- Headline ---------- */
+  h1{
+    margin:28px 0 22px;
+    font-size:clamp(2.3rem,7.5vw,4.5rem);
+    font-weight:800;line-height:1.04;letter-spacing:-.045em;
+  }
+  .w{
+    display:inline-block;opacity:0;
+    transform:translateY(70%) rotate(6deg);filter:blur(10px);
+    animation:wordIn .9s cubic-bezier(.2,.8,.2,1) forwards;
+    animation-delay:calc(.8s + var(--i) * .09s);
+  }
+  @keyframes wordIn{to{opacity:1;transform:none;filter:blur(0)}}
+
+  .name{position:relative;white-space:nowrap}
+  .grad{
+    background:linear-gradient(90deg,var(--a),var(--b),var(--c),var(--b),var(--a));
+    background-size:300% 100%;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    animation:shine 6s linear infinite;
+  }
+  @keyframes shine{to{background-position:300% 0}}
+
+  .squiggle{
+    position:absolute;left:0;right:0;bottom:-.18em;width:100%;height:.32em;overflow:visible;
+  }
+  .squiggle path{
+    fill:none;stroke:url(#sg);stroke-width:5;stroke-linecap:round;
+    stroke-dasharray:260;stroke-dashoffset:260;
+    animation:draw 1.2s cubic-bezier(.65,0,.35,1) 1.7s forwards;
+  }
+  @keyframes draw{to{stroke-dashoffset:0}}
+
+  /* ---------- Copy ---------- */
+  .lead{
+    max-width:30em;margin:0 auto 34px;
+    font-size:clamp(1rem,2.4vw,1.15rem);line-height:1.65;color:var(--muted);
+    opacity:0;animation:fadeUp .9s cubic-bezier(.2,.8,.2,1) 1.6s forwards;
+  }
+  .lead strong{color:var(--fg);font-weight:600;position:relative}
+  .lead strong::after{
+    content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;
+    background:linear-gradient(90deg,var(--a),var(--b));
+    transform:scaleX(0);transform-origin:left;
+    animation:underline .8s ease 2.4s forwards;
+  }
+  @keyframes underline{to{transform:scaleX(1)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  /* ---------- Mail button ---------- */
+  .mail{
+    position:relative;overflow:hidden;isolation:isolate;
+    display:inline-flex;align-items:center;gap:12px;
+    padding:16px 22px;border-radius:16px;
+    color:var(--fg);text-decoration:none;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+    font-family:"JetBrains Mono",monospace;font-size:clamp(13px,3.4vw,15px);
+    opacity:0;
+    animation:popIn .8s cubic-bezier(.34,1.56,.64,1) 2s forwards,glow 3s ease-in-out 3s infinite;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s;
+  }
+  @keyframes popIn{from{opacity:0;transform:scale(.8) translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes glow{
+    0%,100%{box-shadow:0 0 0 0 rgba(139,92,255,0)}
+    50%    {box-shadow:0 0 34px 2px rgba(139,92,255,.35)}
+  }
+  /* auto shine sweep */
+  .mail::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.18) 50%,transparent 70%);
+    transform:translateX(-120%);
+    animation:sweep 3.5s ease-in-out 3.2s infinite;
+  }
+  @keyframes sweep{0%{transform:translateX(-120%)}40%,100%{transform:translateX(120%)}}
+  /* hover fill */
+  .mail::after{
+    content:"";position:absolute;inset:0;z-index:-2;
+    background:linear-gradient(120deg,var(--a),var(--b),var(--c));
+    opacity:0;transition:opacity .4s;
+  }
+  .mail:hover,.mail:focus-visible{transform:translateY(-4px) scale(1.03);border-color:transparent;outline:none}
+  .mail:hover::after,.mail:focus-visible::after{opacity:.9}
+  .mail:active{transform:translateY(-1px) scale(.98)}
+
+  .icon{display:grid;place-items:center;transition:transform .4s}
+  .mail:hover .icon{animation:wiggle .5s ease}
+  @keyframes wiggle{25%{transform:rotate(-14deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-6deg)}}
+
+  .type{
+    display:inline-block;width:0;overflow:hidden;white-space:nowrap;
+    border-right:2px solid var(--c);
+    animation:typing 1.4s steps(20) 2.5s forwards,caret .75s step-end infinite;
+  }
+  @keyframes typing{to{width:20ch}}
+  @keyframes caret{50%{border-color:transparent}}
+
+  .arrow{display:inline-block;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .mail:hover .arrow{transform:translateX(6px)}
+
+  .hint{
+    margin-top:18px;font-size:12px;color:var(--muted);letter-spacing:.04em;
+    opacity:0;animation:fadeUp .8s ease 4s forwards;
+  }
+
+  /* ---------- Marquee ---------- */
+  .marquee{
+    position:fixed;left:0;right:0;bottom:0;z-index:5;overflow:hidden;
+    border-top:1px solid var(--line);background:rgba(7,7,11,.55);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    padding:13px 0;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+            mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    opacity:0;animation:fadeIn 1s ease 2.6s forwards;
+  }
+  .track{display:flex;width:max-content;animation:scroll 32s linear infinite}
+  .marquee:hover .track{animation-play-state:paused}
+  .track span{
+    padding:0 22px;white-space:nowrap;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+  }
+  .track span.star{color:var(--a);padding:0}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* ---------- Accessibility ---------- */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .card,.badge,.w,.lead,.mail,.hint,.topbar,.marquee,.orbit{opacity:1!important;transform:none;filter:none}
+    .orbit{transform:translate(-50%,-50%)}
+    .type{width:20ch;border-right:0}
+    .squiggle path{stroke-dashoffset:0}
+    .lead strong::after{transform:scaleX(1)}
+    .particle{display:none}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Background layers -->
+  <div class="aurora" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+  <div class="grid" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <span class="particle" style="--x:6%;--s:2px;--d:14s;--delay:0s" aria-hidden="true"></span>
+  <span class="particle" style="--x:14%;--s:3px;--d:18s;--delay:-4s" aria-hidden="true"></span>
+  <span class="particle" style="--x:23%;--s:2px;--d:12s;--delay:-8s" aria-hidden="true"></span>
+  <span class="particle" style="--x:31%;--s:1px;--d:16s;--delay:-2s" aria-hidden="true"></span>
+  <span class="particle" style="--x:42%;--s:2px;--d:20s;--delay:-11s" aria-hidden="true"></span>
+  <span class="particle" style="--x:55%;--s:3px;--d:15s;--delay:-6s" aria-hidden="true"></span>
+  <span class="particle" style="--x:63%;--s:1px;--d:13s;--delay:-1s" aria-hidden="true"></span>
+  <span class="particle" style="--x:71%;--s:2px;--d:17s;--delay:-9s" aria-hidden="true"></span>
+  <span class="particle" style="--x:80%;--s:3px;--d:19s;--delay:-3s" aria-hidden="true"></span>
+  <span class="particle" style="--x:88%;--s:2px;--d:14s;--delay:-12s" aria-hidden="true"></span>
+  <span class="particle" style="--x:95%;--s:1px;--d:16s;--delay:-7s" aria-hidden="true"></span>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <span class="logo" aria-label="Rajiv">R</span>
+    <span>© 2026 · Rajiv</span>
+  </header>
+
+  <!-- Main -->
+  <main class="stage">
+    <div class="orbit o1" aria-hidden="true"></div>
+    <div class="orbit o2" aria-hidden="true"></div>
+
+    <div class="float">
+      <section class="card">
+        <span class="badge"><span class="dot"></span>Available for acquisition</span>
+
+        <h1>
+          <span class="w" style="--i:0">This</span>
+          <span class="w" style="--i:1">website</span>
+          <span class="w" style="--i:2">is</span>
+          <span class="w" style="--i:3">owned</span>
+          <span class="w" style="--i:4">by</span>
+          <span class="w name" style="--i:5">
+            <span class="grad">Rajiv.</span>
+            <svg class="squiggle" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="sg" x1="0" x2="1">
+                  <stop offset="0" stop-color="#ff6a3d"/>
+                  <stop offset=".5" stop-color="#8b5cff"/>
+                  <stop offset="1" stop-color="#22d3ee"/>
+                </linearGradient>
+              </defs>
+              <path d="M3 13 C 40 3, 75 3, 100 11 S 160 19, 197 6"/>
+            </svg>
+          </span>
+        </h1>
+
+        <p class="lead">
+          If <strong>Bugcrowd</strong> or your team wants to purchase this site, please mail me at
+        </p>
+
+        <a class="mail" href="mailto:rajiv@generationx.in?subject=Interested%20in%20purchasing%20your%20website">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="m3 7 9 6 9-6"/>
+            </svg>
+          </span>
+          <span class="type">rajiv@generationx.in</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+
+        <p class="hint">Serious offers only · Replies within 24 hours</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span>This site is for sale</span><span class="star">✦</span>
+      <span>rajiv@generationx.in</span><span class="star">✦</span>
+      <span>Owned by Rajiv</span><span class="star">✦</span>
+      <span>Open to offers</span><span class="star">✦</span>
+      <span>This site is for sale</span><span class="star">✦</span>
+      <span>rajiv@generationx.in</span><span class="star">✦</span>
+      <span>Owned by Rajiv</span><span class="star">✦</span>
+      <span>Open to offers</span><span class="star">✦</span>
+      <!-- duplicate for seamless loop -->
+      <span>This site is for sale</span><span class="star">✦</span>
+      <span>rajiv@generationx.in</span><span class="star">✦</span>
+      <span>Owned by Rajiv</span><span class="star">✦</span>
+      <span>Open to offers</span><span class="star">✦</span>
+      <span>This site is for sale</span><span class="star">✦</span>
+      <span>rajiv@generationx.in</span><span class="star">✦</span>
+      <span>Owned by Rajiv</span><span class="star">✦</span>
+      <span>Open to offers</span><span class="star">✦</span>
+    </div>
+  </div>
+
+</body>
+</html>
